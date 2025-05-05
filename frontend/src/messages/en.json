@@ -1,0 +1,66 @@
+{
+  "common": {
+    "appName": "My Diary",
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Settings",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "diary": "Diary",
+    "contacts": "Contacts"
+  },
+  "home": {
+    "welcome": "Welcome to My Diary",
+    "description": "A place to store your precious memories"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed",
+    "loginWithEmail": "Sign in with Email",
+    "loggingIn": "Signing in...",
+    "orContinueWith": "Or continue with",
+    "noAccount": "Don't have an account?",
+    "registerNow": "Register now",
+    "registerSuccess": "Registration successful",
+    "registerFailed": "Registration failed",
+    "registering": "Registering...",
+    "registerWithEmail": "Sign up with Email",
+    "passwordMismatch": "Passwords do not match",
+    "emailAlreadyExists": "Email already registered",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "allFieldsRequired": "Please fill in all required fields",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "diary": {
+    "title": "Title",
+    "content": "Content",
+    "date": "Date",
+    "save": "Save",
+    "cancel": "Cancel",
+    "newEntry": "New Entry",
+    "editEntry": "Edit Entry",
+    "deleteEntry": "Delete Entry",
+    "create": "Create",
+    "recentEntries": "Recent Entries",
+    "viewAll": "View All"
+  },
+  "settings": {
+    "profile": "Profile Settings",
+    "manage": "Manage",
+    "language": "Language",
+    "theme": "Theme",
+    "notifications": "Notifications",
+    "privacy": "Privacy"
+  },
+  "loginDescription": "Sign in with your social account to protect your <important>privacy and data security</important>",
+  "registerDescription": "Create an account to start recording your <important>precious memories</important>",
+  "loginWithGoogle": "Sign in with Google",
+  "loginWithGithub": "Sign in with GitHub",
+  "loginWithWechat": "Sign in with WeChat"
+} 

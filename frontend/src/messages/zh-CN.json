@@ -1,0 +1,70 @@
+{
+  "common": {
+    "appName": "我的日志",
+    "home": "首页",
+    "profile": "个人资料",
+    "settings": "设置",
+    "login": "登录",
+    "logout": "退出",
+    "register": "注册",
+    "diary": "日志",
+    "contacts": "联系人"
+  },
+  "home": {
+    "welcome": "欢迎使用我的日志",
+    "description": "一个存储您珍贵回忆的地方"
+  },
+  "auth": {
+    "email": "电子邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码？",
+    "loginSuccess": "登录成功",
+    "loginFailed": "登录失败",
+    "loginWithEmail": "使用邮箱登录",
+    "loggingIn": "登录中...",
+    "orContinueWith": "或继续使用",
+    "noAccount": "还没有账号？",
+    "registerNow": "立即注册",
+    "registerSuccess": "注册成功",
+    "registerFailed": "注册失败",
+    "registering": "注册中...",
+    "registerWithEmail": "使用邮箱注册",
+    "passwordMismatch": "两次输入的密码不一致",
+    "emailAlreadyExists": "该邮箱已被注册",
+    "invalidEmail": "请输入有效的邮箱地址",
+    "passwordTooShort": "密码长度至少为6位",
+    "allFieldsRequired": "请填写所有必填字段",
+    "alreadyHaveAccount": "已有账号？"
+  },
+  "diary": {
+    "title": "标题",
+    "content": "内容",
+    "date": "日期",
+    "save": "保存",
+    "cancel": "取消",
+    "newEntry": "新建日志",
+    "editEntry": "编辑日志",
+    "deleteEntry": "删除日志",
+    "create": "创建",
+    "recentEntries": "最近日志",
+    "viewAll": "查看全部",
+    "dateTime": "日期时间"
+  },
+  "settings": {
+    "profile": "个人设置",
+    "manage": "管理",
+    "language": "语言",
+    "theme": "主题",
+    "notifications": "通知",
+    "privacy": "隐私"
+  },
+  "loginDescription": "使用社交账号登录以保护您的<important>隐私和数据安全</important>",
+  "registerDescription": "创建一个账号以开始记录您的<important>珍贵回忆</important>",
+  "loginWithGoogle": "使用Google账号登录",
+  "loginWithGithub": "使用GitHub账号登录",
+  "loginWithWechat": "使用微信账号登录",
+  "loading": "加载中...",
+  "noDiaries": "没有日志",
+  "contacts":"联系人"
+} 

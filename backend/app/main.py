@@ -36,7 +36,8 @@ async def i18n_middleware(request: Request, call_next):
     return response
 
 @app.get("/")
-async def read_root(t: Translator = Depends(get_translator)):
+async def read_root(request: Request):
+    t = get_translator(request)
     return {"message": t("welcome_message")}
 
 # 语言API

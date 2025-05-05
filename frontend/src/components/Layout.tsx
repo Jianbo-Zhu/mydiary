@@ -1,20 +1,23 @@
-import React, { ReactNode, useState } from 'react';
-import { 
-  AppBar, 
-  Avatar, 
-  Box, 
-  Container, 
-  CssBaseline, 
-  Divider, 
-  Drawer, 
-  IconButton, 
-  List, 
-  ListItem, 
-  ListItemButton, 
-  ListItemIcon, 
-  ListItemText, 
-  Toolbar, 
-  Typography 
+'use client';
+import React, { ReactNode, useState, useEffect, MouseEvent } from 'react';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Container,
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Typography,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
@@ -23,9 +26,11 @@ import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useRouter } from 'next/router';
+import LoginIcon from '@mui/icons-material/Login';
 import { useTranslations } from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useRouter, usePathname } from '../i18n/routing';
+import { authApi } from '../utils/api';
 
 interface LayoutProps {
   children: ReactNode;
@@ -33,11 +38,66 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const t = useTranslations('common');
+
+  // 登录状态通过localStorage的token判断
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLogin = () => {
+      setIsLoggedIn(!!localStorage.getItem('token'));
+    };
+    checkLogin();
+    // 监听token变化（多标签页同步）
+    window.addEventListener('storage', checkLogin);
+    return () => {
+      window.removeEventListener('storage', checkLogin);
+    };
+  }, []);
 
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+    setOpen(false);
+  };
+
+  const handleAvatarClick = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogin = () => {
+    handleNavigation('/auth/login');
+    handleMenuClose();
+  };
+
+  const handleLogout = async () => {
+    // 调用后端API（可选，如果有需要）
+    try {
+      await authApi.logout();
+    } catch (e) {
+      // 忽略错误，确保本地登出
+    }
+    // 移除本地token
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    handleMenuClose();
+    // 跳转到登录页或首页
+    router.push('/auth/login');
+  };
+
+  const handleProfile = () => {
+    handleNavigation('/profile');
+    handleMenuClose();
   };
 
   const menuItems = [
@@ -63,15 +123,65 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{
+              flexGrow: 1,
+              cursor: 'pointer'
+            }}
+            onClick={() => handleNavigation('/')}
+          >
             {t('appName')}
           </Typography>
           <LanguageSwitcher />
-          <IconButton color="inherit">
+          <IconButton
+            color="inherit"
+            onClick={handleAvatarClick}
+            aria-controls={Boolean(anchorEl) ? 'user-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
+          >
             <Avatar sx={{ width: 32, height: 32 }}>
               <AccountCircleIcon />
             </Avatar>
           </IconButton>
+          <Menu
+            id="user-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            MenuListProps={{
+              'aria-labelledby': 'user-avatar-button',
+            }}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          >
+            {isLoggedIn
+              ? [
+                <MenuItem onClick={handleProfile} key="profile">
+                  <ListItemIcon>
+                    <AccountCircleIcon fontSize="small" />
+                  </ListItemIcon>
+                  {t('profile')}
+                </MenuItem>,
+                <MenuItem onClick={handleLogout} key="logout">
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  {t('logout')}
+                </MenuItem>,
+              ]
+              : (
+                <MenuItem onClick={handleLogin}>
+                  <ListItemIcon>
+                    <LoginIcon fontSize="small" />
+                  </ListItemIcon>
+                  {t('login')}
+                </MenuItem>
+              )}
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -92,12 +202,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <List>
             {menuItems.map((item) => (
               <ListItem key={item.text} disablePadding>
-                <ListItemButton 
-                  onClick={() => {
-                    router.push(item.path);
-                    setOpen(false);
-                  }}
-                  selected={router.pathname === item.path}
+                <ListItemButton
+                  onClick={() => handleNavigation(item.path)}
+                  selected={pathname === item.path}
                 >
                   <ListItemIcon>
                     {item.icon}
@@ -109,14 +216,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </List>
           <Divider />
           <List>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => router.push('/auth/login')}>
-                <ListItemIcon>
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText primary={t('logout')} />
-              </ListItemButton>
-            </ListItem>
+            {isLoggedIn ? (
+              <ListItem disablePadding>
+                <ListItemButton onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={t('logout')} />
+                </ListItemButton>
+              </ListItem>
+            ) : (
+              <ListItem disablePadding>
+                <ListItemButton onClick={handleLogin}>
+                  <ListItemIcon>
+                    <LoginIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={t('login')} />
+                </ListItemButton>
+              </ListItem>
+            )}
           </List>
         </Box>
       </Drawer>
@@ -136,4 +254,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default Layout; 
+export default Layout;

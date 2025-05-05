@@ -18,7 +18,7 @@ translations = {
         "deleted": "Resource deleted successfully"
     },
     "zh": {
-        "welcome_message": "欢迎使用我的日记 API",
+        "welcome_message": "欢迎使用我的日志 API",
         "not_found": "资源未找到",
         "unauthorized": "未授权访问",
         "validation_error": "验证错误",
@@ -43,7 +43,7 @@ def create_translator(lang: str) -> Translator:
         return translations.get(lang, translations["en"]).get(key, key)
     return translate
 
-def get_translator(request: Request = Depends()) -> Translator:
+def get_translator(request: Request) -> Translator:
     """依赖注入函数，返回一个翻译器"""
     lang = get_language(request)
     return create_translator(lang)

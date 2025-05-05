@@ -6,6 +6,7 @@ from app.core.auth import get_current_user
 from app.models.base import get_db
 from app.models.user import User
 from app.models.contact import Contact
+from app.models.diary import Diary
 from app.schemas.contact import ContactCreate, ContactUpdate, ContactResponse
 
 router = APIRouter()
@@ -42,6 +43,17 @@ def get_contacts(
     contacts = db.query(Contact).filter(
         Contact.user_id == current_user.id
     ).offset(skip).limit(limit).all()
+    return contacts
+
+# 获取最近联系的联系人
+@router.get("/recent", response_model=List[ContactResponse])
+def get_recent_contacts(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    contacts = db.query(Contact).join(Contact.diaries).filter(
+        Contact.user_id == current_user.id
+    ).order_by(Diary.happened_at.desc()).limit(10).all()
     return contacts
 
 # 获取单个联系人

@@ -1,88 +1,88 @@
-# My Diary 个人日记应用
+# My Diary Personal Diary Application
 
-一个支持国际化的个人日记应用，前端使用 Next.js，后端使用 FastAPI。
+A personal diary application with internationalization support, built with Next.js for the frontend and FastAPI for the backend.
 
-## 项目结构
+## Project Structure
 
 ```
 mydiary/
-├── frontend/          # Next.js 前端项目
-│   ├── src/           # 源代码目录
-│   │   ├── components/  # 组件
-│   │   ├── pages/     # 页面
-│   │   ├── locales/   # 国际化文件
-│   │   ├── utils/     # 工具函数
-│   │   └── styles/    # 样式文件
-│   ├── public/        # 静态资源
-│   └── package.json   # 前端依赖
+├── frontend/          # Next.js frontend project
+│   ├── src/           # Source code directory
+│   │   ├── components/  # Components
+│   │   ├── pages/     # Pages
+│   │   ├── locales/   # Internationalization files
+│   │   ├── utils/     # Utility functions
+│   │   └── styles/    # Style files
+│   ├── public/        # Static resources
+│   └── package.json   # Frontend dependencies
 │
-├── backend/           # FastAPI 后端项目
-│   ├── app/           # 应用代码
-│   └── requirements.txt # 后端依赖
+├── backend/           # FastAPI backend project
+│   ├── app/           # Application code
+│   └── requirements.txt # Backend dependencies
 │
-└── docker-compose.yml # Docker 配置
+└── docker-compose.yml # Docker configuration
 ```
 
-## 功能特性
+## Features
 
-- 支持中英文国际化
-- 响应式界面设计
-- 日记编写和管理
-- 用户认证和授权
+- English and Chinese internationalization support
+- Responsive interface design
+- Diary writing and management
+- User authentication and authorization
 
-## 开发环境设置
+## Development Environment Setup
 
-### 前端 (Next.js)
+### Frontend (Next.js)
 
-1. 安装依赖：
+1. Install dependencies:
 
 ```bash
 cd frontend
 npm install
 ```
 
-2. 启动开发服务器：
+2. Start the development server:
 
 ```bash
 npm run dev
 ```
 
-前端开发服务器将在 http://localhost:3000 启动。
+The frontend development server will start at http://localhost:3000.
 
-### 后端 (FastAPI)
+### Backend (FastAPI)
 
-1. 创建并激活虚拟环境：
+1. Create and activate a virtual environment:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Linux/Mac
-# 或
+# or
 .venv\Scripts\activate  # Windows
 ```
 
-2. 安装依赖：
+2. Install dependencies:
 
 ```bash
 cd backend
 pip install -r requirements.txt
 ```
 
-3. 启动开发服务器：
+3. Start the development server:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-后端API将在 http://localhost:8000 启动。
+The backend API will start at http://localhost:8000.
 
-## 使用 Docker
+## Using Docker
 
-使用 Docker Compose 一键启动整个应用：
+Start the entire application with Docker Compose:
 
 ```bash
 docker-compose up -d
 ```
 
-## 国际化使用
+## Internationalization Usage
 
-前端项目支持中英文切换，查看 `frontend/src/docs/i18n-guide.md` 了解更多关于国际化的使用方法。 
+The frontend project supports switching between English and Chinese. See `frontend/src/docs/i18n-guide.md` for more information about internationalization usage. 
