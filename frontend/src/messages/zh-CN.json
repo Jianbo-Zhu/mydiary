@@ -8,7 +8,10 @@
     "logout": "退出",
     "register": "注册",
     "diary": "日志",
-    "contacts": "联系人"
+    "contacts": "联系人",
+    "close": "关闭",
+    "cancel": "取消",
+    "save": "保存"
   },
   "home": {
     "welcome": "欢迎使用我的日志",
@@ -59,6 +62,26 @@
     "notifications": "通知",
     "privacy": "隐私"
   },
+  "contact": {
+    "detailTitle": "联系人详情",
+    "edit": "编辑",
+    "phone": "电话",
+    "email": "邮箱",
+    "birthday": "生日",
+    "notes": "备注",
+    "tags": "标签",
+    "notFound": "未找到联系人信息",
+    "viewRelatedDiaries": "查看相关日志",
+    "title": "联系人",
+    "new": "新建联系人",
+    "name": "姓名",
+    "actions": "操作",
+    "empty": "暂无联系人",
+    "delete": "删除",
+    "confirmDelete": "确定要删除该联系人吗？",
+    "rowsPerPage": "每页行数",
+    "tagsInput": "标签(逗号分隔)"
+  },
   "loginDescription": "使用社交账号登录以保护您的<important>隐私和数据安全</important>",
   "registerDescription": "创建一个账号以开始记录您的<important>珍贵回忆</important>",
   "loginWithGoogle": "使用Google账号登录",
@@ -67,4 +90,4 @@
   "loading": "加载中...",
   "noDiaries": "没有日志",
   "contacts":"联系人"
-} 
+}

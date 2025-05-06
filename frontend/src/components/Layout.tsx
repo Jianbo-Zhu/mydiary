@@ -47,13 +47,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    console.log("process.env.NEXT_PUBLIC_API_URL: " + process.env.NEXT_PUBLIC_API_URL);
-
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (!token) {
-      router.push('/auth/login');
-      return;
-    }
     const checkLogin = () => {
       setIsLoggedIn(!!localStorage.getItem('token'));
     };
@@ -63,6 +56,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => {
       window.removeEventListener('storage', checkLogin);
     };
+  }, []);
+
+  useEffect(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+      router.push('/auth/login');
+      return;
+    }
   }, []);
 
   const toggleDrawer = () => {

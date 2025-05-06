@@ -5,6 +5,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import CreateDiaryDialog from './CreateDiaryDialog';
 import LexicalReadOnlyViewer from './LexicalReadOnlyViewer';
 
@@ -24,6 +25,7 @@ const colorMap: Record<number, string> = {
 };
 
 export default function DiaryTimeline({ diaries, setRefreshFlag }) {
+  const t = useTranslations();
   const [editDiary, setEditDiary] = useState<DiaryResponse | null>(null);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
@@ -97,7 +99,7 @@ export default function DiaryTimeline({ diaries, setRefreshFlag }) {
               {dayjs.utc(diary.happened_at).local().format('DD')}
             </Box>
             <Typography variant="caption" sx={{ color: '#1976d2', fontWeight: 500, fontSize: 22,letterSpacing: 1 }}>
-              {dayjs.utc(diary.happened_at).local().format('MM月')}
+              {dayjs.utc(diary.happened_at).local().format('YYYY/MM')}
             </Typography>
           </Box>
           <Paper elevation={3} sx={{ ml: { xs: 0, sm: 2 }, p: { xs: 2, sm: 3 }, flex: 1, position: 'relative', borderRadius: 4, boxShadow: hoveredId === diary.id ? '0 4px 24px #1976d233' : '0 2px 12px #e0e7ef22', transition: 'box-shadow 0.2s', minHeight: 120, bgcolor: '#fff' }}>

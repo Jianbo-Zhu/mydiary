@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     OAUTH_REDIRECT_URL: str = os.getenv("OAUTH_REDIRECT_URL", "http://localhost:3000/auth/callback")
     
     # 前端URL
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:3000")
     
     # 邮件配置 - 163邮箱
     SMTP_USER: str = os.getenv("SMTP_USER", "")

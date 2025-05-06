@@ -3,7 +3,7 @@ import { Typography, Box, Paper, Button } from '@mui/material';
 import { diaryApi } from '../../utils/api';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import CreateDiaryDialog from '../../components/CreateDiaryDialog';
 import DiaryTimeline from '../../components/DiaryTimeline';
 import { DiaryResponse } from 'types/entities';
@@ -13,6 +13,8 @@ import RecentContacts from '../../components/RecentContacts';
 export default function Home() {
   const t = useTranslations();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const contactId = searchParams.get('contactId');
   const [diaries, setDiaries] = useState<DiaryResponse[] | null>(null);
   const [recentContacts, setRecentContacts] = useState<ContactResponse[]>([]);
   const [loading, setLoading] = useState(false);
@@ -36,19 +38,18 @@ export default function Home() {
   };
 
   useEffect(() => {
-
-    // 获取日记数据
     setLoading(true);
     diaryApi.getDiaries()
       .then(res => {
-        // 按 happened_at 或 created_at 倒序
-        const sorted = [...res.data].sort((a, b) => new Date(b.happened_at || b.created_at).getTime() - new Date(a.happened_at || a.created_at).getTime());
+        let sorted = [...res.data].sort((a, b) => new Date(b.happened_at || b.created_at).getTime() - new Date(a.happened_at || a.created_at).getTime());
+        if (contactId) {
+          sorted = sorted.filter(diary => diary.contacts && diary.contacts.some(c => String(c.id) === String(contactId)));
+        }
         setDiaries(sorted);
       })
       .catch(e => setError(e.response?.data?.message || '加载失败'));
-
     setLoading(false);
-  }, [router, refreshFlag]);
+  }, [router, refreshFlag, contactId]);
 
   const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('token');
 
