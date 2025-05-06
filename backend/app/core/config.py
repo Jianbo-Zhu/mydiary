@@ -16,7 +16,9 @@ class Settings(BaseSettings):
     )
     
     # CORS配置
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000", os.getenv("FRONTEND_URL", "http://localhost:3000")]
+    BACKEND_CORS_ORIGINS: str = os.getenv(
+        "BACKEND_CORS_ORIGINS", "http://localhost:3000"
+    )
     
     # OAuth配置
     GOOGLE_CLIENT_ID: Optional[str] = os.getenv("GOOGLE_CLIENT_ID", "")

@@ -3,14 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import os
 from typing import Optional
-
+from app.core.config import settings
 from app.api import user, contact, diary, activity
 from app.core.i18n import get_translator, Translator
+from dotenv import load_dotenv
 
+# 加载 .env 文件
+# load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
 app = FastAPI(title="My Diary")
 
 # 配置CORS
-origins = os.environ.get("BACKEND_CORS_ORIGINS", "http://localhost:3000").split(",")
+origins = settings.BACKEND_CORS_ORIGINS.split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -53,4 +56,5 @@ async def set_language(lang: str):
 
 if __name__ == "__main__":
     import uvicorn
+    print(f"Running on {settings.BACKEND_CORS_ORIGINS}")
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True) 
