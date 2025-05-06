@@ -36,12 +36,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (!token) {
-      router.push('/auth/login');
-      return;
-    }
-    
+
     // 获取日记数据
     setLoading(true);
     diaryApi.getDiaries()

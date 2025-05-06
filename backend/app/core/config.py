@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")  # 注意：使用授权码而非邮箱密码
     SMTP_SERVER: str = os.getenv("SMTP_SERVER","")
     SMTP_PORT: int = os.getenv("SMTP_PORT")  # 163邮箱推荐使用SSL加密的465端口
-    SMTP_SSL: bool = os.getenv("SMTP_SSL").lower() == "true"  # 启用SSL加密
+    SMTP_SSL: bool = os.getenv("SMTP_SSL", "false").lower() == "true"  # 启用SSL加密
     MAIL_FROM_NAME: str = "MyDiary应用"  # 发件人名称
 
     # MySQL SSL配置

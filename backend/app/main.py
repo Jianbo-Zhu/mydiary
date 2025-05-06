@@ -10,7 +10,7 @@ from app.core.i18n import get_translator, Translator
 app = FastAPI(title="My Diary")
 
 # 配置CORS
-origins = os.environ.get("CORS_ORIGINS", "http://localhost:3000").split(",")
+origins = os.environ.get("BACKEND_CORS_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
