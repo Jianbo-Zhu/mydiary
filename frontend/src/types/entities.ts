@@ -24,6 +24,8 @@ export interface ContactBase {
   name: string;
   phone?: string;
   email?: string;
+  company?: string;
+  address?: string;
   birthday?: string; // ISO date string
   notes?: string;
   tags?: string[];

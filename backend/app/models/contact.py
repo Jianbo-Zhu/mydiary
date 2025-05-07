@@ -14,10 +14,12 @@ class Contact(Base):
     birthday = Column(Date, nullable=True)
     notes = Column(Text, nullable=True)
     tags = Column(JSON, nullable=True)  # 存储标签的JSON数组
+    address = Column(String(255), nullable=True)  # 新增地址字段
+    company = Column(String(255), nullable=True)  # 新增单位字段
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     # 关联到用户
     user = relationship("User", backref="contacts")
     # 关联到互动活动
-    activities = relationship("Activity", back_populates="contact") 
+    activities = relationship("Activity", back_populates="contact")

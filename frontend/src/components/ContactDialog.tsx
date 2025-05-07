@@ -2,20 +2,11 @@ import { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography, IconButton } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
+import { ContactResponse } from 'types/entities';
 
-export interface Contact {
-  id: number;
-  name: string;
-  phone?: string;
-  email?: string;
-  birthday?: string;
-  notes?: string;
-  tags?: string[];
-}
-
-export function ContactForm({ open, onClose, onSubmit, initial }: { open: boolean; onClose: () => void; onSubmit: (data: any) => void; initial?: Partial<Contact> }) {
+export function ContactForm({ open, onClose, onSubmit, initial }: { open: boolean; onClose: () => void; onSubmit: (data: any) => void; initial?: Partial<ContactResponse> }) {
   const t = useTranslations();
-  const [form, setForm] = useState<Partial<Contact>>(initial || {});
+  const [form, setForm] = useState<Partial<ContactResponse>>(initial || {});
   useEffect(() => { setForm(initial || {}); }, [initial, open]);
   return (
     <Dialog open={open} onClose={onClose} PaperProps={{ sx: { borderRadius: 3, p: 1, minWidth: 360 } }}>
@@ -24,6 +15,8 @@ export function ContactForm({ open, onClose, onSubmit, initial }: { open: boolea
         <TextField label={t('contact.name', { defaultValue: '姓名' })} value={form.name || ''} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required fullWidth size="small" autoFocus />
         <TextField label={t('contact.phone', { defaultValue: '电话' })} value={form.phone || ''} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} fullWidth size="small" />
         <TextField label={t('contact.email', { defaultValue: '邮箱' })} value={form.email || ''} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} fullWidth size="small" />
+        <TextField label={t('contact.company', { defaultValue: '单位' })} value={form.company || ''} onChange={e => setForm(f => ({ ...f, company: e.target.value }))} fullWidth size="small" />
+        <TextField label={t('contact.address', { defaultValue: '地址' })} value={form.address || ''} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} fullWidth size="small" />
         <TextField label={t('contact.birthday', { defaultValue: '生日' })} type="date" InputLabelProps={{ shrink: true }} value={form.birthday || ''} onChange={e => setForm(f => ({ ...f, birthday: e.target.value }))} fullWidth size="small" />
         <TextField label={t('contact.notes', { defaultValue: '备注' })} value={form.notes || ''} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} fullWidth size="small" multiline minRows={2} />
         <TextField label={t('contact.tagsInput', { defaultValue: '标签(逗号分隔)' })} value={form.tags?.join(',') || ''} onChange={e => setForm(f => ({ ...f, tags: e.target.value.split(',').map(s => s.trim()).filter(Boolean) }))} fullWidth size="small" />
@@ -36,7 +29,7 @@ export function ContactForm({ open, onClose, onSubmit, initial }: { open: boolea
   );
 }
 
-export function ContactDetailDialog({ open, onClose, contact, onEdit }: { open: boolean; onClose: () => void; contact?: Contact; onEdit?: (contact: Contact) => void }) {
+export function ContactDetailDialog({ open, onClose, contact, onEdit }: { open: boolean; onClose: () => void; contact?: ContactResponse; onEdit?: (contact: ContactResponse) => void }) {
   const t = useTranslations();
   return (
     <Dialog open={open} onClose={onClose} PaperProps={{ sx: { borderRadius: 4, minWidth: 360, p: 1 } }}>
@@ -58,6 +51,14 @@ export function ContactDetailDialog({ open, onClose, contact, onEdit }: { open: 
             <Box>
               <Typography variant="subtitle2" color="text.secondary">{t('contact.email', { defaultValue: '邮箱' })}</Typography>
               <Typography variant="body1">{contact.email || '-'}</Typography>
+            </Box>
+            <Box>
+              <Typography variant="subtitle2" color="text.secondary">{t('contact.company', { defaultValue: '单位' })}</Typography>
+              <Typography variant="body1">{contact.company || '-'}</Typography>
+            </Box>
+            <Box>
+              <Typography variant="subtitle2" color="text.secondary">{t('contact.address', { defaultValue: '地址' })}</Typography>
+              <Typography variant="body1">{contact.address || '-'}</Typography>
             </Box>
             <Box>
               <Typography variant="subtitle2" color="text.secondary">{t('contact.birthday', { defaultValue: '生日' })}</Typography>

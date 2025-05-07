@@ -10,6 +10,8 @@ class ContactBase(BaseModel):
     birthday: Optional[date] = None
     notes: Optional[str] = None
     tags: Optional[List[str]] = None
+    address: Optional[str] = None  # 新增地址字段
+    company: Optional[str] = None  # 新增单位字段
 
 # 创建联系人的请求模型
 class ContactCreate(ContactBase):
@@ -27,4 +29,4 @@ class ContactResponse(ContactBase):
     updated_at: datetime
     
     class Config:
-        orm_mode = True 
+        orm_mode = True

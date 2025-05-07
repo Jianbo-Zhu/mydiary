@@ -5,28 +5,19 @@ import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableConta
 import { Edit, Delete } from '@mui/icons-material';
 import { contactsApi } from '../../../utils/api';
 import { ContactForm, ContactDetailDialog } from '../../../components/ContactDialog';
-
-interface Contact {
-  id: number;
-  name: string;
-  phone?: string;
-  email?: string;
-  birthday?: string;
-  notes?: string;
-  tags?: string[];
-}
+import { ContactResponse } from 'types/entities';
 
 export default function ContactsPage() {
   const t = useTranslations();
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<ContactResponse[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [openForm, setOpenForm] = useState(false);
-  const [editing, setEditing] = useState<Contact | undefined>(undefined);
-  const [detailContact, setDetailContact] = useState<Contact | undefined>(undefined);
+  const [editing, setEditing] = useState<ContactResponse | undefined>(undefined);
+  const [detailContact, setDetailContact] = useState<ContactResponse | undefined>(undefined);
 
   const fetchContacts = async () => {
     setLoading(true);
@@ -50,7 +41,7 @@ export default function ContactsPage() {
     fetchContacts();
   };
 
-  const handleEdit = (contact: Contact) => {
+  const handleEdit = (contact: ContactResponse) => {
     setEditing(contact);
     setOpenForm(true);
   };
@@ -81,6 +72,8 @@ export default function ContactsPage() {
                 <TableCell sx={{ fontWeight: 700 }}>{t('contact.name', { defaultValue: '姓名' })}</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>{t('contact.phone', { defaultValue: '电话' })}</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>{t('contact.email', { defaultValue: '邮箱' })}</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>{t('contact.company', { defaultValue: '单位' })}</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>{t('contact.address', { defaultValue: '地址' })}</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>{t('contact.birthday', { defaultValue: '生日' })}</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>{t('contact.notes', { defaultValue: '备注' })}</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>{t('contact.tags', { defaultValue: '标签' })}</TableCell>
@@ -90,7 +83,7 @@ export default function ContactsPage() {
             <TableBody>
               {contacts.length === 0 && !loading && !error && (
                 <TableRow>
-                  <TableCell colSpan={7} align="center" sx={{ py: 6, color: 'text.secondary' }}>
+                  <TableCell colSpan={9} align="center" sx={{ py: 6, color: 'text.secondary' }}>
                     {t('contact.empty', { defaultValue: '暂无联系人' })}
                   </TableCell>
                 </TableRow>
@@ -105,6 +98,8 @@ export default function ContactsPage() {
                   <TableCell>{c.name}</TableCell>
                   <TableCell>{c.phone}</TableCell>
                   <TableCell>{c.email}</TableCell>
+                  <TableCell>{c.company}</TableCell>
+                  <TableCell>{c.address}</TableCell>
                   <TableCell>{c.birthday}</TableCell>
                   <TableCell>{c.notes}</TableCell>
                   <TableCell>{c.tags?.join(', ')}</TableCell>

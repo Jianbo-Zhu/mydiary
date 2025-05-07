@@ -1,0 +1,3 @@
+ALTER TABLE `contacts`
+  ADD COLUMN `company` VARCHAR(255) DEFAULT NULL AFTER `email`,
+  ADD COLUMN `address` VARCHAR(255) DEFAULT NULL AFTER `company`;
