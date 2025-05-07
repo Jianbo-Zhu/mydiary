@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import CreateDiaryDialog from '../../components/CreateDiaryDialog';
 import DiaryTimeline from '../../components/DiaryTimeline';
 import { DiaryResponse } from 'types/entities';
-import { ContactResponse } from 'types/entities';
 import RecentContacts from '../../components/RecentContacts';
 
 export default function Home() {
@@ -16,11 +15,12 @@ export default function Home() {
   const searchParams = useSearchParams();
   const contactId = searchParams.get('contactId');
   const [diaries, setDiaries] = useState<DiaryResponse[] | null>(null);
-  const [recentContacts, setRecentContacts] = useState<ContactResponse[]>([]);
   const [loading, setLoading] = useState(false);
+  const [contactName, setContactName] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
   const [refreshFlag, setRefreshFlag] = useState(0);
+  const [showContactFilter, setShowContactFilter] = useState(true);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -38,12 +38,16 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setShowContactFilter(true);
     setLoading(true);
     diaryApi.getDiaries()
       .then(res => {
         let sorted = [...res.data].sort((a, b) => new Date(b.happened_at || b.created_at).getTime() - new Date(a.happened_at || a.created_at).getTime());
         if (contactId) {
           sorted = sorted.filter(diary => diary.contacts && diary.contacts.some(c => String(c.id) === String(contactId)));
+        }
+        if(sorted.length > 0){
+          setContactName(sorted[0].contacts?.find(c => String(c.id) === String(contactId))?.name || null);
         }
         setDiaries(sorted);
       })
@@ -65,6 +69,47 @@ export default function Home() {
             {loading && <Typography sx={{ color: 'primary.main', fontWeight: 500 }}>{t('loading') || '加载中...'}</Typography>}
             {error && <Typography color="error">{error}</Typography>}
             {diaries?.length === 0 && <Typography>{t('noDiaries')}</Typography>}
+            {contactId && showContactFilter && (
+              <Typography sx={{ color: 'text.secondary', fontSize: 14, mb: 2, display: 'flex', alignItems: 'center' }}>
+                {t('diary.interactWith') || '最近互动'} :
+                <span
+                  className="mention-node"
+                  style={{
+                    background: '#e0f7fa',
+                    color: '#00796b',
+                    borderRadius: '4px',
+                    padding: '0 4px',
+                    fontWeight: 500,
+                    fontSize: 15,
+                    marginLeft: 4,
+                    marginRight: 4,
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                  }}
+                >
+                  {contactName}
+                  <span
+                    style={{
+                      marginLeft: 6,
+                      cursor: 'pointer',
+                      color: '#888',
+                      fontSize: 13,
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                    }}
+                    title={t('common.clearFilter', { defaultValue: '清除过滤' })}
+                    onClick={e => {
+                      e.stopPropagation();
+                      setShowContactFilter(false);
+                      // router.replace(`/${router.locale || ''}`);
+                      handleCreated();
+                    }}
+                  >
+                    ×
+                  </span>
+                </span>
+              </Typography>
+            )}
             {diaries && <DiaryTimeline diaries={diaries} setRefreshFlag={setRefreshFlag} />}
           </Paper>
           <Paper elevation={3} sx={{ flex: 1, borderRadius: 4, p: { xs: 1, sm: 3 }, minHeight: 400, bgcolor: '#f6f8fa', boxShadow: '0 2px 12px #e0e7ef33', display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>

@@ -11,7 +11,8 @@
     "contacts": "Contacts",
     "close": "Close",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "clearFilter": "Clear filter"
   },
   "home": {
     "welcome": "Welcome to My Diary",
@@ -52,7 +53,8 @@
     "create": "Create",
     "recentEntries": "Recent Entries",
     "viewAll": "View All",
-    "dateTime": "Date & Time"
+    "dateTime": "Date & Time",
+    "interactWith": "Interaction with"
   },
   "settings": {
     "profile": "Profile Settings",
@@ -86,5 +88,8 @@
   "registerDescription": "Create an account to start recording your <important>precious memories</important>",
   "loginWithGoogle": "Sign in with Google",
   "loginWithGithub": "Sign in with GitHub",
-  "loginWithWechat": "Sign in with WeChat"
+  "loginWithWechat": "Sign in with WeChat",
+  "loading": "Loading...",
+  "noDiaries": "No Diaries",
+  "contacts":"Contacts"
 }

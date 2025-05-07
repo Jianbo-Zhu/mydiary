@@ -11,7 +11,8 @@
     "contacts": "联系人",
     "close": "关闭",
     "cancel": "取消",
-    "save": "保存"
+    "save": "保存",
+    "clearFilter": "清除过滤"
   },
   "home": {
     "welcome": "欢迎使用我的日志",
@@ -52,7 +53,8 @@
     "create": "创建",
     "recentEntries": "最近日志",
     "viewAll": "查看全部",
-    "dateTime": "日期时间"
+    "dateTime": "日期时间",
+    "interactWith": "最近互动"
   },
   "settings": {
     "profile": "个人设置",
