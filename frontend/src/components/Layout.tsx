@@ -110,7 +110,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const menuItems = [
     { text: t('home'), path: '/', icon: <HomeIcon /> },
-    { text: t('diary'), path: '/diary', icon: <CalendarMonthIcon /> },
     { text: t('contacts'), path: '/contacts', icon: <PeopleIcon /> },
     { text: t('settings'), path: '/settings', icon: <SettingsIcon /> },
   ];
