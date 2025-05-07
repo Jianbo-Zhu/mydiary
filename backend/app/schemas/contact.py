@@ -12,6 +12,7 @@ class ContactBase(BaseModel):
     tags: Optional[List[str]] = None
     address: Optional[str] = None  # 新增地址字段
     company: Optional[str] = None  # 新增单位字段
+    relation_to_me: Optional[str] = None  # 跟“我”的关系类型
 
 # 创建联系人的请求模型
 class ContactCreate(ContactBase):

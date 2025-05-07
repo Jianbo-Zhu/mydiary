@@ -1,18 +1,38 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography, IconButton } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box, Typography, IconButton, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
-import { ContactResponse } from 'types/entities';
+import { ContactResponse, RelationshipTypeResponse } from 'types/entities';
+import { relationshipTypeApi } from 'utils/api';
 
 export function ContactForm({ open, onClose, onSubmit, initial }: { open: boolean; onClose: () => void; onSubmit: (data: any) => void; initial?: Partial<ContactResponse> }) {
   const t = useTranslations();
   const [form, setForm] = useState<Partial<ContactResponse>>(initial || {});
+  const [relationshipTypes, setRelationshipTypes] = useState<RelationshipTypeResponse[]>([]);
   useEffect(() => { setForm(initial || {}); }, [initial, open]);
+  useEffect(() => {
+    // 获取关系类型
+    relationshipTypeApi.getRelationshipTypes()
+      .then(types => setRelationshipTypes(types.data))
+      .catch(e => console.error(e));
+  }, [open, initial?.user_id]);
   return (
     <Dialog open={open} onClose={onClose} PaperProps={{ sx: { borderRadius: 3, p: 1, minWidth: 360 } }}>
       <DialogTitle sx={{ fontWeight: 700 }}>{initial?.id ? t('contact.edit', { defaultValue: '编辑联系人' }) : t('contact.new', { defaultValue: '新建联系人' })}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
         <TextField label={t('contact.name', { defaultValue: '姓名' })} value={form.name || ''} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required fullWidth size="small" autoFocus />
+        <FormControl fullWidth size="small">
+          <InputLabel>{t('contact.relationToMe', { defaultValue: '跟我关系' })}</InputLabel>
+          <Select
+            label={t('contact.relationToMe', { defaultValue: '跟我关系' })}
+            value={form.relation_to_me || ''}
+            onChange={e => setForm(f => ({ ...f, relation_to_me: e.target.value }))}
+          >
+            {relationshipTypes.map(type => (
+              <MenuItem key={type.id} value={type.name}>{type.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField label={t('contact.phone', { defaultValue: '电话' })} value={form.phone || ''} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} fullWidth size="small" />
         <TextField label={t('contact.email', { defaultValue: '邮箱' })} value={form.email || ''} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} fullWidth size="small" />
         <TextField label={t('contact.company', { defaultValue: '单位' })} value={form.company || ''} onChange={e => setForm(f => ({ ...f, company: e.target.value }))} fullWidth size="small" />
@@ -44,6 +64,10 @@ export function ContactDetailDialog({ open, onClose, contact, onEdit }: { open: 
       <DialogContent sx={{ pt: 2, pb: 1, minWidth: 340 }}>
         {contact ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+              <Typography variant="subtitle2" color="text.secondary">{t('contact.relationToMe', { defaultValue: '跟我关系' })}</Typography>
+              <Typography variant="body1">{contact.relation_to_me || '-'}</Typography>
+            </Box>
             <Box>
               <Typography variant="subtitle2" color="text.secondary">{t('contact.phone', { defaultValue: '电话' })}</Typography>
               <Typography variant="body1">{contact.phone || '-'}</Typography>

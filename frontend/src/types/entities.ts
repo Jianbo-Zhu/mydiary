@@ -28,6 +28,7 @@ export interface ContactBase {
   address?: string;
   birthday?: string; // ISO date string
   notes?: string;
+  relation_to_me?: string;
   tags?: string[];
 }
 
@@ -58,4 +59,23 @@ export interface Token {
   access_token: string;
   token_type: string;
   user: UserResponse;
+}
+
+// RelationshipType
+export interface RelationshipTypeBase {
+  name: string;
+  description?: string;
+}
+
+export interface RelationshipTypeCreate extends RelationshipTypeBase {
+  user_id: number;
+}
+
+export interface RelationshipTypeUpdate extends Partial<RelationshipTypeBase> {}
+
+export interface RelationshipTypeResponse extends RelationshipTypeBase {
+  id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
 }

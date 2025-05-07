@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DiaryResponse } from 'types/entities';
+import { DiaryResponse, RelationshipTypeResponse } from 'types/entities';
 import { ContactResponse } from 'types/entities';
 
 // 创建axios实例
@@ -109,6 +109,13 @@ export const contactsApi = {
 
   // 获取最近联系人
   getRecentContacts: () => api.get('/api/contacts/recent'),
+};
+
+// 关系类型相关API
+export const relationshipTypeApi = {
+  // 获取当前用户的关系类型列表
+  getRelationshipTypes: () =>
+    api.get<RelationshipTypeResponse[]>('/api/relationship-types/'),
 };
 
 export default api;

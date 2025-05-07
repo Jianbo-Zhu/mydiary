@@ -12,7 +12,11 @@
     "close": "关闭",
     "cancel": "取消",
     "save": "保存",
-    "clearFilter": "清除过滤"
+    "clearFilter": "清除过滤",
+    "relationToMe": "跟我关系",
+    "networkView": "网络图模式",
+    "tableView": "表格模式",
+    "pleaseSelect": "请选择"
   },
   "home": {
     "welcome": "欢迎使用我的日志",
@@ -84,7 +88,10 @@
     "rowsPerPage": "每页行数",
     "tagsInput": "标签(逗号分隔)",
     "company": "单位",
-    "address": "地址"
+    "address": "地址",
+    "relationToMe": "跟我关系",
+    "networkView": "网络图模式",
+    "tableView": "表格模式"
   },
   "loginDescription": "使用社交账号登录以保护您的<important>隐私和数据安全</important>",
   "registerDescription": "创建一个账号以开始记录您的<important>珍贵回忆</important>",

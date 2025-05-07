@@ -12,7 +12,8 @@
     "close": "Close",
     "cancel": "Cancel",
     "save": "Save",
-    "clearFilter": "Clear filter"
+    "clearFilter": "Clear filter",
+    "pleaseSelect": "Please select"
   },
   "home": {
     "welcome": "Welcome to My Diary",
@@ -84,7 +85,10 @@
     "rowsPerPage": "Rows per page",
     "tagsInput": "Tags (comma separated)",
     "company": "Company",
-    "address": "Address"
+    "address": "Address",
+    "relationToMe": "Relation to Me",
+    "networkView": "Network View",
+    "tableView": "Table View"
   },
   "loginDescription": "Sign in with your social account to protect your <important>privacy and data security</important>",
   "registerDescription": "Create an account to start recording your <important>precious memories</important>",

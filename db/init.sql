@@ -30,6 +30,7 @@ CREATE TABLE `contacts` (
   `birthday` date DEFAULT NULL,
   `notes` text,
   `tags` json DEFAULT NULL,
+  `relation_to_me` varchar(64) DEFAULT NULL COMMENT '跟“我”的关系类型',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -67,4 +68,39 @@ CREATE TABLE `diary_contact` (
   KEY `contact_id` (`contact_id`),
   CONSTRAINT `diary_contact_ibfk_1` FOREIGN KEY (`contact_id`) REFERENCES `contacts` (`id`),
   CONSTRAINT `diary_contact_ibfk_2` FOREIGN KEY (`diary_id`) REFERENCES `diaries` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- mydiary.relationships definition
+
+CREATE TABLE `relationships` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `contact_id_1` int NOT NULL,
+  `contact_id_2` int NOT NULL,
+  `relation_type` varchar(64) NOT NULL,
+  `notes` text,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `ix_relationships_id` (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `contact_id_1` (`contact_id_1`),
+  KEY `contact_id_2` (`contact_id_2`),
+  CONSTRAINT `relationships_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `relationships_ibfk_2` FOREIGN KEY (`contact_id_1`) REFERENCES `contacts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `relationships_ibfk_3` FOREIGN KEY (`contact_id_2`) REFERENCES `contacts` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `relationship_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `description` text,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_relationship_type_user_name` (`user_id`, `name`),
+  KEY `idx_relationship_type_user` (`user_id`),
+  CONSTRAINT `relationship_type_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

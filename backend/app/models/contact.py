@@ -16,6 +16,7 @@ class Contact(Base):
     tags = Column(JSON, nullable=True)  # 存储标签的JSON数组
     address = Column(String(255), nullable=True)  # 新增地址字段
     company = Column(String(255), nullable=True)  # 新增单位字段
+    relation_to_me = Column(String(64), nullable=True)  # 跟“我”的关系类型
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 

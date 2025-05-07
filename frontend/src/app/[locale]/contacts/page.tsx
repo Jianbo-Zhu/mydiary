@@ -1,11 +1,14 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, IconButton, Tooltip, Divider } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, IconButton, Tooltip, Divider, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { Edit, Delete, AccountTree } from '@mui/icons-material';
 import { contactsApi } from '../../../utils/api';
 import { ContactForm, ContactDetailDialog } from '../../../components/ContactDialog';
 import { ContactResponse } from 'types/entities';
+import dynamic from 'next/dynamic';
+
+const ContactNetworkGraph = dynamic(() => import('../../../components/ContactNetworkGraph'), { ssr: false });
 
 export default function ContactsPage() {
   const t = useTranslations();
@@ -18,6 +21,7 @@ export default function ContactsPage() {
   const [openForm, setOpenForm] = useState(false);
   const [editing, setEditing] = useState<ContactResponse | undefined>(undefined);
   const [detailContact, setDetailContact] = useState<ContactResponse | undefined>(undefined);
+  const [viewMode, setViewMode] = useState<'table' | 'network'>('table');
 
   const fetchContacts = async () => {
     setLoading(true);
@@ -58,77 +62,99 @@ export default function ContactsPage() {
   };
 
   return (
-    <Box sx={{ maxWidth: 'md', mx: 'auto', my: 6, px: 2 }}>
-      <Paper elevation={3} sx={{ borderRadius: 4, p: { xs: 2, sm: 4 }, mb: 4 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h5" sx={{ flex: 1, fontWeight: 700, letterSpacing: 1 }} gutterBottom>{t('contact.title', { defaultValue: '联系人' })}</Typography>
-          <Button variant="contained" color="primary" startIcon={<Edit />} sx={{ borderRadius: 3, fontWeight: 600 }} onClick={() => { setEditing(undefined); setOpenForm(true); }}>{t('contact.new', { defaultValue: '新建联系人' })}</Button>
-        </Box>
-        <Divider sx={{ mb: 2 }} />
-        <TableContainer>
-          <Table size="small" sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow sx={{ background: theme => theme.palette.action.hover }}>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.name', { defaultValue: '姓名' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.phone', { defaultValue: '电话' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.email', { defaultValue: '邮箱' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.company', { defaultValue: '单位' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.address', { defaultValue: '地址' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.birthday', { defaultValue: '生日' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.notes', { defaultValue: '备注' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.tags', { defaultValue: '标签' })}</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>{t('contact.actions', { defaultValue: '操作' })}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {contacts.length === 0 && !loading && !error && (
-                <TableRow>
-                  <TableCell colSpan={9} align="center" sx={{ py: 6, color: 'text.secondary' }}>
-                    {t('contact.empty', { defaultValue: '暂无联系人' })}
-                  </TableCell>
+    <Box sx={{ maxWidth: 'xl', mx: 'auto', my: 6, px: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+        <ToggleButtonGroup
+          value={viewMode}
+          exclusive
+          onChange={(_, v) => v && setViewMode(v)}
+          size="small"
+        >
+          <ToggleButton value="table">
+            {t('contact.tableView', { defaultValue: '表格模式' })}
+          </ToggleButton>
+          <ToggleButton value="network">
+            <AccountTree sx={{ mr: 1 }} fontSize="small" />
+            {t('contact.networkView', { defaultValue: '网络图模式' })}
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+      {viewMode === 'table' ? (
+        <Paper elevation={3} sx={{ borderRadius: 4, p: { xs: 2, sm: 4 }, mb: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Typography variant="h5" sx={{ flex: 1, fontWeight: 700, letterSpacing: 1 }} gutterBottom>{t('contact.title', { defaultValue: '联系人' })}</Typography>
+            <Button variant="contained" color="primary" startIcon={<Edit />} sx={{ borderRadius: 3, fontWeight: 600 }} onClick={() => { setEditing(undefined); setOpenForm(true); }}>{t('contact.new', { defaultValue: '新建联系人' })}</Button>
+          </Box>
+          <Divider sx={{ mb: 2 }} />
+          <TableContainer>
+            <Table size="small" sx={{ minWidth: 650 }}>
+              <TableHead>
+                <TableRow sx={{ background: theme => theme.palette.action.hover }}>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.name', { defaultValue: '姓名' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.relationToMe', { defaultValue: '跟我关系' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.phone', { defaultValue: '电话' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.email', { defaultValue: '邮箱' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.company', { defaultValue: '单位' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.address', { defaultValue: '地址' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.birthday', { defaultValue: '生日' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.notes', { defaultValue: '备注' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.tags', { defaultValue: '标签' })}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>{t('contact.actions', { defaultValue: '操作' })}</TableCell>
                 </TableRow>
-              )}
-              {contacts.map((c) => (
-                <TableRow key={c.id} hover sx={{ transition: 'background 0.2s', cursor: 'pointer' }}
-                  onClick={e => {
-                    if ((e.target as HTMLElement).closest('button')) return;
-                    setDetailContact(c);
-                  }}
-                >
-                  <TableCell>{c.name}</TableCell>
-                  <TableCell>{c.phone}</TableCell>
-                  <TableCell>{c.email}</TableCell>
-                  <TableCell>{c.company}</TableCell>
-                  <TableCell>{c.address}</TableCell>
-                  <TableCell>{c.birthday}</TableCell>
-                  <TableCell>{c.notes}</TableCell>
-                  <TableCell>{c.tags?.join(', ')}</TableCell>
-                  <TableCell>
-                    <Tooltip title={t('contact.edit', { defaultValue: '编辑' })} arrow>
-                      <IconButton onClick={() => handleEdit(c)} size="small" sx={{ mr: 1 }} color="primary"><Edit fontSize="small" /></IconButton>
-                    </Tooltip>
-                    <Tooltip title={t('contact.delete', { defaultValue: '删除' })} arrow>
-                      <IconButton onClick={() => handleDelete(c.id)} size="small" color="error"><Delete fontSize="small" /></IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          component="div"
-          count={total}
-          page={page}
-          onPageChange={(_, newPage) => setPage(newPage)}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={e => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
-          sx={{ mt: 1 }}
-          labelRowsPerPage={t('contact.rowsPerPage', { defaultValue: '每页行数' })}
-        />
-        {loading && <Typography sx={{ mt: 3, textAlign: 'center', color: 'text.secondary' }}>{t('loading', { defaultValue: '加载中...' })}</Typography>}
-        {error && <Typography color="error" sx={{ mt: 3, textAlign: 'center' }}>{error}</Typography>}
-      </Paper>
+              </TableHead>
+              <TableBody>
+                {contacts.length === 0 && !loading && !error && (
+                  <TableRow>
+                    <TableCell colSpan={10} align="center" sx={{ py: 6, color: 'text.secondary' }}>
+                      {t('contact.empty', { defaultValue: '暂无联系人' })}
+                    </TableCell>
+                  </TableRow>
+                )}
+                {contacts.map((c) => (
+                  <TableRow key={c.id} hover sx={{ transition: 'background 0.2s', cursor: 'pointer' }}
+                    onClick={e => {
+                      if ((e.target as HTMLElement).closest('button')) return;
+                      setDetailContact(c);
+                    }}
+                  >
+                    <TableCell>{c.name}</TableCell>
+                    <TableCell>{c.relation_to_me || '-'}</TableCell>
+                    <TableCell>{c.phone}</TableCell>
+                    <TableCell>{c.email}</TableCell>
+                    <TableCell>{c.company}</TableCell>
+                    <TableCell>{c.address}</TableCell>
+                    <TableCell>{c.birthday}</TableCell>
+                    <TableCell>{c.notes}</TableCell>
+                    <TableCell>{c.tags?.join(', ')}</TableCell>
+                    <TableCell>
+                      <Tooltip title={t('contact.edit', { defaultValue: '编辑' })} arrow>
+                        <IconButton onClick={() => handleEdit(c)} size="small" sx={{ mr: 1 }} color="primary"><Edit fontSize="small" /></IconButton>
+                      </Tooltip>
+                      <Tooltip title={t('contact.delete', { defaultValue: '删除' })} arrow>
+                        <IconButton onClick={() => handleDelete(c.id)} size="small" color="error"><Delete fontSize="small" /></IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            component="div"
+            count={total}
+            page={page}
+            onPageChange={(_, newPage) => setPage(newPage)}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={e => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
+            sx={{ mt: 1 }}
+            labelRowsPerPage={t('contact.rowsPerPage', { defaultValue: '每页行数' })}
+          />
+          {loading && <Typography sx={{ mt: 3, textAlign: 'center', color: 'text.secondary' }}>{t('loading', { defaultValue: '加载中...' })}</Typography>}
+          {error && <Typography color="error" sx={{ mt: 3, textAlign: 'center' }}>{error}</Typography>}
+        </Paper>
+      ) : (
+        <ContactNetworkGraph contacts={contacts} />
+      )}
       <ContactForm open={openForm} onClose={() => { setOpenForm(false); setEditing(undefined); }} onSubmit={handleFormSubmit} initial={editing} />
       <ContactDetailDialog 
         open={!!detailContact} 
