@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
+from typing import List
 from app.models.relationship import Relationship as RelationshipModel
 from app.schemas.relationship import Relationship, RelationshipCreate, RelationshipUpdate
 from app.models.base import get_db
@@ -17,7 +18,7 @@ def create_relationship(rel: RelationshipCreate, db: Session = Depends(get_db), 
     db.refresh(db_rel)
     return db_rel
 
-@router.get("/", response_model=list[Relationship])
+@router.get("/", response_model=List[Relationship])
 def list_relationships(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(RelationshipModel).filter(RelationshipModel.user_id == current_user.id).all()
 
