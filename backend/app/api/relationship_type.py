@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app.models.relationship_type import RelationshipType as RelationshipTypeModel
@@ -16,7 +17,7 @@ def create_relationship_type(rel_type: RelationshipTypeCreate, db: Session = Dep
     db.refresh(db_type)
     return db_type
 
-@router.get("/", response_model=list[RelationshipType])
+@router.get("/", response_model=List[RelationshipType])
 def list_relationship_types(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(RelationshipTypeModel).filter(RelationshipTypeModel.user_id == current_user.id).all()
 
