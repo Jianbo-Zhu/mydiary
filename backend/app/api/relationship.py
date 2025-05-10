@@ -7,7 +7,7 @@ from app.models.base import get_db
 from app.core.auth import get_current_user
 from app.models.user import User
 
-router = APIRouter(tags=["relationship"])
+router = APIRouter()
 
 @router.post("/", response_model=Relationship)
 def create_relationship(rel: RelationshipCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

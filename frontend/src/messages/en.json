@@ -90,6 +90,16 @@
     "networkView": "Network View",
     "tableView": "Table View"
   },
+  "relationship": {
+    "newTitle": "New Relationship",
+    "editTitle": "Edit Relationship",
+    "contact1": "Contact 1",
+    "contact2": "Contact 2",
+    "type": "Relationship Type",
+    "notes": "Notes",
+    "selectType": "Please select relationship type",
+    "createFailed": "Failed to create relationship"
+  },
   "loginDescription": "Sign in with your social account to protect your <important>privacy and data security</important>",
   "registerDescription": "Create an account to start recording your <important>precious memories</important>",
   "loginWithGoogle": "Sign in with Google",

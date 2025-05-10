@@ -3,7 +3,6 @@ from typing import Optional
 from datetime import datetime
 
 class RelationshipBase(BaseModel):
-    id: int
     user_id: int
     contact_id_1: int
     contact_id_2: int
@@ -18,6 +17,7 @@ class RelationshipUpdate(BaseModel):
     notes: Optional[str] = None
 
 class Relationship(RelationshipBase):
+    id: int
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 

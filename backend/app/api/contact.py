@@ -26,6 +26,9 @@ def create_contact(
         birthday=contact.birthday,
         notes=contact.notes,
         tags=contact.tags,
+        relation_to_me=contact.relation_to_me,
+        address=contact.address,
+        company=contact.company
     )
     db.add(db_contact)
     db.commit()

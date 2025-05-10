@@ -79,3 +79,25 @@ export interface RelationshipTypeResponse extends RelationshipTypeBase {
   created_at: string;
   updated_at: string;
 }
+
+// Relationship
+export interface RelationshipBase {
+  id: number;
+  user_id: number;
+  contact_id_1: number;
+  contact_id_2: number;
+  relation_type: string;
+  notes?: string;
+}
+
+export interface RelationshipCreate extends Omit<RelationshipBase, 'id'> {}
+
+export interface RelationshipUpdate {
+  relation_type?: string;
+  notes?: string;
+}
+
+export interface Relationship extends RelationshipBase {
+  created_at?: string;
+  updated_at?: string;
+}

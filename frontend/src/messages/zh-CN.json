@@ -93,6 +93,16 @@
     "networkView": "网络图模式",
     "tableView": "表格模式"
   },
+  "relationship": {
+    "newTitle": "新建关系",
+    "editTitle": "编辑关系",
+    "contact1": "联系人1",
+    "contact2": "联系人2",
+    "type": "关系类型",
+    "notes": "备注",
+    "selectType": "请选择关系类型",
+    "createFailed": "创建关系失败"
+  },
   "loginDescription": "使用社交账号登录以保护您的<important>隐私和数据安全</important>",
   "registerDescription": "创建一个账号以开始记录您的<important>珍贵回忆</important>",
   "loginWithGoogle": "使用Google账号登录",

@@ -3,9 +3,9 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, IconButton, Tooltip, Divider, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { Edit, Delete, AccountTree } from '@mui/icons-material';
-import { contactsApi } from '../../../utils/api';
+import { contactsApi, relationshipApi } from '../../../utils/api';
 import { ContactForm, ContactDetailDialog } from '../../../components/ContactDialog';
-import { ContactResponse } from 'types/entities';
+import { ContactResponse, Relationship } from 'types/entities';
 import dynamic from 'next/dynamic';
 
 const ContactNetworkGraph = dynamic(() => import('../../../components/ContactNetworkGraph'), { ssr: false });
@@ -13,6 +13,7 @@ const ContactNetworkGraph = dynamic(() => import('../../../components/ContactNet
 export default function ContactsPage() {
   const t = useTranslations();
   const [contacts, setContacts] = useState<ContactResponse[]>([]);
+  const [relationships, setRelationships] = useState<Relationship[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -24,12 +25,15 @@ export default function ContactsPage() {
   const [viewMode, setViewMode] = useState<'table' | 'network'>('table');
 
   const fetchContacts = async () => {
+    console.log('fetchContacts');
     setLoading(true);
     setError(null);
     try {
       const res = await contactsApi.getContacts({ page, rowsPerPage });
       setContacts(res.data);
       setTotal(res.data.length < rowsPerPage && page === 0 ? res.data.length : (page + 1) * rowsPerPage + (res.data.length === rowsPerPage ? rowsPerPage : 0));
+      const res1 = await relationshipApi.getRelationships();
+      setRelationships(res1.data);
     } catch (e: any) {
       setError(e.response?.data?.message || '加载失败');
     } finally {
@@ -37,7 +41,9 @@ export default function ContactsPage() {
     }
   };
 
-  useEffect(() => { fetchContacts(); }, [page, rowsPerPage]);
+  useEffect(() => {
+    fetchContacts();
+  }, [page, rowsPerPage]);
 
   const handleDelete = async (id: number) => {
     if (!window.confirm(t('contact.confirmDelete', { defaultValue: '确定要删除该联系人吗？' }))) return;
@@ -153,13 +159,13 @@ export default function ContactsPage() {
           {error && <Typography color="error" sx={{ mt: 3, textAlign: 'center' }}>{error}</Typography>}
         </Paper>
       ) : (
-        <ContactNetworkGraph contacts={contacts} />
+        <ContactNetworkGraph contacts={contacts} relationships={relationships} />
       )}
       <ContactForm open={openForm} onClose={() => { setOpenForm(false); setEditing(undefined); }} onSubmit={handleFormSubmit} initial={editing} />
-      <ContactDetailDialog 
-        open={!!detailContact} 
-        onClose={() => setDetailContact(undefined)} 
-        contact={detailContact} 
+      <ContactDetailDialog
+        open={!!detailContact}
+        onClose={() => setDetailContact(undefined)}
+        contact={detailContact}
         onEdit={c => {
           setDetailContact(undefined);
           setEditing(c);

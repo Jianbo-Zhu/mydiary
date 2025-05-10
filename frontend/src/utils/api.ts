@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DiaryResponse, RelationshipTypeResponse } from 'types/entities';
+import { DiaryResponse, Relationship, RelationshipTypeResponse } from 'types/entities';
 import { ContactResponse } from 'types/entities';
 
 // 创建axios实例
@@ -116,6 +116,21 @@ export const relationshipTypeApi = {
   // 获取当前用户的关系类型列表
   getRelationshipTypes: () =>
     api.get<RelationshipTypeResponse[]>('/api/relationship-types/'),
+};
+
+// 关系相关API
+export const relationshipApi = {
+  // 获取当前用户的所有关系
+  getRelationships: () =>
+    api.get<Relationship[]>('/api/relationships/'),
+
+  // 创建关系
+  createRelationship: (data: any) =>
+    api.post('/api/relationships/', data),
+
+  // 删除关系
+  deleteRelationship: (id: number) =>
+    api.delete(`/api/relationships/${id}`),
 };
 
 export default api;
