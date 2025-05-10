@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { DiaryResponse, Relationship, RelationshipTypeResponse } from 'types/entities';
 import { ContactResponse } from 'types/entities';
+import { TodoResponse } from 'types/entities';
 
 // 创建axios实例
 const api = axios.create({
@@ -131,6 +132,15 @@ export const relationshipApi = {
   // 删除关系
   deleteRelationship: (id: number) =>
     api.delete(`/api/relationships/${id}`),
+};
+
+// 代办任务相关API
+export const todoApi = {
+  getTodos: (params?: any) => api.get<TodoResponse[]>('/api/todos/', { params }),
+  getTodo: (id: number) => api.get<TodoResponse>(`/api/todos/${id}`),
+  createTodo: (data: any) => api.post('/api/todos', data),
+  updateTodo: (id: number, data: any) => api.put(`/api/todos/${id}`, data),
+  deleteTodo: (id: number) => api.delete(`/api/todos/${id}`),
 };
 
 export default api;

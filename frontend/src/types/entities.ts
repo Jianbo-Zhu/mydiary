@@ -101,3 +101,26 @@ export interface Relationship extends RelationshipBase {
   created_at?: string;
   updated_at?: string;
 }
+
+// Todo
+export interface TodoBase {
+  content: string;
+  due_time?: string; // ISO string
+  contact_id?: number;
+  priority?: number; // 1-5
+  repeat_rule?: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+}
+
+export interface TodoCreate extends TodoBase {}
+
+export interface TodoUpdate extends Partial<TodoBase> {
+  is_completed?: boolean;
+}
+
+export interface TodoResponse extends TodoBase {
+  id: number;
+  user_id: number;
+  is_completed: boolean;
+  created_at: string;
+  updated_at: string;
+}

@@ -2,6 +2,7 @@
   "common": {
     "appName": "我的日志",
     "home": "首页",
+    "todos": "代办事项",
     "profile": "个人资料",
     "settings": "设置",
     "login": "登录",
@@ -103,6 +104,34 @@
     "selectType": "请选择关系类型",
     "createFailed": "创建关系失败"
   },
+  "todo": {
+    "title": "代办事项",
+    "create": "新建任务",
+    "editTitle": "编辑任务",
+    "createTitle": "新建任务",
+    "content": "任务内容",
+    "contentRequired": "请输入任务内容",
+    "dueTime": "截止时间",
+    "priority": "优先级",
+    "priorityLevel": "优先级{level}",
+    "repeatRule": "重复规则",
+    "repeatNone": "不重复",
+    "repeatDaily": "每天",
+    "repeatWeekly": "每周",
+    "repeatMonthly": "每月",
+    "repeatYearly": "每年",
+    "contact": "关联联系人",
+    "noContact": "无联系人",
+    "completed": "已完成",
+    "cancel": "取消",
+    "save": "保存",
+    "edit": "编辑",
+    "delete": "删除",
+    "confirmDelete": "确定要删除该任务吗？",
+    "empty": "暂无代办事项",
+    "loading": "加载中...",
+    "loadFailed": "加载任务列表失败"
+  },
   "loginDescription": "使用社交账号登录以保护您的<important>隐私和数据安全</important>",
   "registerDescription": "创建一个账号以开始记录您的<important>珍贵回忆</important>",
   "loginWithGoogle": "使用Google账号登录",
@@ -110,5 +139,5 @@
   "loginWithWechat": "使用微信账号登录",
   "loading": "加载中...",
   "noDiaries": "没有日志",
-  "contacts":"联系人"
+  "contacts": "联系人"
 }

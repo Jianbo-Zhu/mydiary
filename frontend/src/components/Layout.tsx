@@ -27,6 +27,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useTranslations } from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useRouter, usePathname } from '../i18n/routing';
@@ -111,6 +112,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const menuItems = [
     { text: t('home'), path: '/', icon: <HomeIcon /> },
     { text: t('contacts'), path: '/contacts', icon: <PeopleIcon /> },
+    { text: t('todos'), path: '/todos', icon: <CheckCircleIcon /> },
     { text: t('settings'), path: '/settings', icon: <SettingsIcon /> },
   ];
 

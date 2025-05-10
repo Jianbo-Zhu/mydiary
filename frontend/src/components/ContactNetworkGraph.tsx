@@ -40,7 +40,7 @@ const getGraphData = (contacts: ContactResponse[], relationships: Relationship[]
       };
     }),
   ];
-  const relationEdges: Edge[] = contacts.map((c) => ({
+  const relationEdges: Edge[] = contacts.filter((c) => c.relation_to_me).map((c) => ({
     id: `me-${c.id}`,
     source: 'me',
     target: String(c.id),

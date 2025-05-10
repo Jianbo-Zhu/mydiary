@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 import os
 from typing import Optional
 from app.core.config import settings
-from app.api import user, contact, diary, activity, relationship, relationship_type
+from app.api import user, contact, diary, activity, relationship, relationship_type, todo
 from app.core.i18n import get_translator, Translator
 from dotenv import load_dotenv
 
@@ -29,6 +29,7 @@ app.include_router(contact.router, prefix="/api/contacts", tags=["Contacts"])
 app.include_router(activity.router, prefix="/api/activities", tags=["Activities"])
 app.include_router(relationship.router, prefix="/api/relationships", tags=["Relationships"])
 app.include_router(relationship_type.router, prefix="/api/relationship-types", tags=["Relationship Types"])
+app.include_router(todo.router, prefix="/api/todos", tags=["Todos"])
 
 # 国际化中间件
 @app.middleware("http")
