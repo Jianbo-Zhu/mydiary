@@ -21,6 +21,9 @@ from app.models.base import Base
 from app.models.user import User
 from app.models.diary import Diary, diary_contact_association
 from app.models.contact import Contact
+from app.models.relationship import Relationship
+from app.models.relationship_type import RelationshipType
+from app.models.todo import Todo
 
 target_metadata = Base.metadata
 

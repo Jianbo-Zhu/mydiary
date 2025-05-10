@@ -26,7 +26,7 @@ def create_todo(todo: TodoCreate, db: Session = Depends(get_db), current_user: U
 
 @router.get("/", response_model=List[TodoResponse])
 def list_todos(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    return db.query(TodoModel).filter(TodoModel.user_id == current_user.id).order_by(TodoModel.due_time.asc().nullslast(), TodoModel.priority.desc()).all()
+    return db.query(TodoModel).filter(TodoModel.user_id == current_user.id).order_by(TodoModel.due_time.asc(), TodoModel.priority.desc()).all()
 
 @router.get("/{todo_id}", response_model=TodoResponse)
 def get_todo(todo_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
