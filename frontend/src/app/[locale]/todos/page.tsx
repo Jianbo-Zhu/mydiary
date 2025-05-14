@@ -67,7 +67,7 @@ export default function TodosPage() {
   };
 
   return (
-    <Box sx={{ maxWidth: 700, mx: 'auto', my: 6, px: 2 }}>
+    <Box sx={{ maxWidth: 'xl', mx: 'auto', my: 6, px: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: 1 }}>{t('title')}</Typography>
         <Button variant="contained" onClick={() => { setEditing(undefined); setOpenDialog(true); }} sx={{ borderRadius: 3, fontWeight: 600 }}>{t('create')}</Button>

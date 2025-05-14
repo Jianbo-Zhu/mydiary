@@ -25,7 +25,7 @@ export function ContactForm({ open, onClose, onSubmit, initial }: { open: boolea
         {initial?.id ? t('contact.edit', { defaultValue: '编辑联系人' }) : t('contact.new', { defaultValue: '新建联系人' })}
       </DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1, p: { xs: 4, sm: 6 }, pt: { xs: 7, sm: 9 } }}>
-        <TextField label={t('contact.name', { defaultValue: '姓名' })} value={form.name || ''} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required fullWidth size="small" autoFocus sx={{ bgcolor: '#fff', borderRadius: 2 }} />
+        <TextField label={t('contact.name', { defaultValue: '姓名' })} value={form.name || ''} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required fullWidth size="small" autoFocus sx={{ bgcolor: '#fff', borderRadius: 2, mt: 1 }} />
         <FormControl fullWidth size="small">
           <InputLabel>{t('contact.relationToMe', { defaultValue: '跟我关系' })}</InputLabel>
           <Select

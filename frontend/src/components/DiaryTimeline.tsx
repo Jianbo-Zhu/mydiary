@@ -114,17 +114,20 @@ export default function DiaryTimeline({ diaries, setRefreshFlag }) {
               </IconButton>
             )}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>
+                <span style={{fontSize:16,marginRight:2}}>🕒</span>{dayjs.utc(diary.happened_at).local().format('YYYY-MM-DD HH:mm')}
+              </Typography>
               {diary.event_type && (
                 <Chip label={diary.event_type} size="small" sx={{ ml: 1, bgcolor: '#e0f7fa', color: '#00796b', fontWeight: 600, fontSize: 14 }} />
               )}
+              {Array.isArray(diary.tags) && diary.tags.length > 0 && diary.tags.map(tag => (
+                <Chip key={tag} label={tag} size="small" sx={{ ml: 1, bgcolor: '#f3e5f5', color: '#6a1b9a', fontWeight: 600, fontSize: 14 }} />
+              ))}
               {diary.location && (
                 <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>
                   <span style={{fontSize:16,marginRight:2}}>📍</span>{diary.location}
                 </Typography>
               )}
-              <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>
-                <span style={{fontSize:16,marginRight:2}}>🕒</span>{dayjs.utc(diary.happened_at).local().format('YYYY-MM-DD HH:mm')}
-              </Typography>
             </Box>
             {diary.content && (
               <Box sx={{ mt: 1 }}>

@@ -5,6 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Chip from '@mui/material/Chip';
 import { useState } from 'react';
 import { diaryApi } from '../utils/api';
 import { useTranslations } from 'next-intl';
@@ -27,6 +29,7 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { MentionNode, MentionData } from './LexicalMentionNode';
 import MentionPlugin from './MentionPlugin';
+// import LexicalToolbar from './LexicalToolbar';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -60,6 +63,8 @@ const CreateDiaryDialog = ({ open, onClose, onCreated, diary, mode = 'create' }:
     const [editorState, setEditorState] = useState<EditorState | null>(null);
     const [editor, setEditor] = useState<LexicalEditor | null>(null);
     const [mentionCounts, setMentionCounts] = useState<Record<number, { data: MentionData, count: number }>>({});
+    const [tags, setTags] = useState<string[]>(diary?.tags || []);
+    const [tagInput, setTagInput] = useState('');
     const isEdit = mode === 'edit';
     const handleDateTimeChange = (value: Dayjs | null) => {
         setDateTime(value);
@@ -67,21 +72,41 @@ const CreateDiaryDialog = ({ open, onClose, onCreated, diary, mode = 'create' }:
 
     var count = 0;
 
+    // 标签输入处理
+    const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTagInput(e.target.value);
+    };
+    const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if ((e.key === 'Enter' || e.key === ',' || e.key === ' ') && tagInput.trim()) {
+            e.preventDefault();
+            const newTag = tagInput.trim();
+            if (newTag && !tags.includes(newTag)) {
+                setTags([...tags, newTag]);
+            }
+            setTagInput('');
+        } else if (e.key === 'Backspace' && !tagInput && tags.length > 0) {
+            setTags(tags.slice(0, -1));
+        }
+    };
+    const handleTagDelete = (tagToDelete: string) => {
+        setTags(tags.filter(tag => tag !== tagToDelete));
+    };
+
     // 初始化编辑器内容（仅首次打开时）
     React.useEffect(() => {
         if (open && diary && isEdit && editor) {
-          requestIdleCallback(() => {
-            editor.setEditorState(
-                editor.parseEditorState(
-                    diary.content && diary.content.trim()
-                        ? JSON.parse(diary.content)
-                        : { root: { children: [], direction: null, format: '', indent: 0, type: 'root', version: 1 }, selection: null },
-                    () => {
-                        // 默认解析器即可
-                    }
-                )
-            );
-          });
+            requestIdleCallback(() => {
+                editor.setEditorState(
+                    editor.parseEditorState(
+                        diary.content && diary.content.trim()
+                            ? JSON.parse(diary.content)
+                            : { root: { children: [], direction: null, format: '', indent: 0, type: 'root', version: 1 }, selection: null },
+                        () => {
+                            // 默认解析器即可
+                        }
+                    )
+                );
+            });
         }
         if (open && diary && isEdit) {
             setDateTime(dayjs.utc(diary.happened_at));
@@ -166,12 +191,12 @@ const CreateDiaryDialog = ({ open, onClose, onCreated, diary, mode = 'create' }:
         let unregister: (() => void) | undefined;
         if (editor) {
             // 监听MentionNode的删除
-            unregister = editor.registerMutationListener(MentionNode, (mutations, {prevEditorState}) => {
+            unregister = editor.registerMutationListener(MentionNode, (mutations, { prevEditorState }) => {
                 mutations.forEach((mutation, nodeKey) => {
-                    if ( mutation === 'destroyed') {
+                    if (mutation === 'destroyed') {
                         const node = prevEditorState._nodeMap.get(nodeKey);
                         if (node && '__mention' in node) {
-                            handleMentionRemove((node as unknown as {__mention: MentionData}).__mention);
+                            handleMentionRemove((node as unknown as { __mention: MentionData }).__mention);
                         }
                     }
                 });
@@ -196,13 +221,15 @@ const CreateDiaryDialog = ({ open, onClose, onCreated, diary, mode = 'create' }:
                 await diaryApi.updateDiary(diary.id, {
                     content: contentJson,
                     happened_at: dateTime.local().toISOString(),
-                    contact_ids: Object.keys(mentionCounts).map(Number), // 新增联系人ID列表
+                    contact_ids: Object.keys(mentionCounts).map(Number),
+                    tags,
                 });
             } else {
                 await diaryApi.createDiary({
                     content: contentJson,
                     happened_at: dateTime.local().toISOString(),
-                    contact_ids: Object.keys(mentionCounts).map(Number), // 新增联系人ID列表
+                    contact_ids: Object.keys(mentionCounts).map(Number),
+                    tags,
                 });
             }
             setFormError('');
@@ -237,10 +264,10 @@ const CreateDiaryDialog = ({ open, onClose, onCreated, diary, mode = 'create' }:
                 p: 0
             }
         }}>
-            <DialogTitle sx={{ fontWeight: 700, fontSize: 22, letterSpacing: 1, bgcolor: '#1976d2', color: '#fff', borderTopLeftRadius: 16, borderTopRightRadius: 16, py: 2, px: 3 }}>
+            <DialogTitle sx={{ fontWeight: 700, fontSize: 22, letterSpacing: 1, bgcolor: '#1976d2', color: '#fff', py: 2, px: 3 }}>
                 {isEdit ? (t('diary.editEntry') || '编辑日志') : (t('diary.newEntry') || '新建日志')}
             </DialogTitle>
-            <DialogContent sx={{ p: { xs: 4, sm:6 }, pt: { xs: 7, sm: 9 } }}>
+            <DialogContent sx={{ p: { xs: 4, sm: 6 }, pt: { xs: 7, sm: 9 } }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateTimePicker
                         label={t('diary.dateTime') || '日期和时间'}
@@ -253,6 +280,7 @@ const CreateDiaryDialog = ({ open, onClose, onCreated, diary, mode = 'create' }:
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, mt: 3, gap: 2 }}>
                     <Box sx={{ flex: 1, minHeight: 180, border: '1px solid #e0e7ef', borderRadius: 3, p: 2, background: '#fff', boxShadow: '0 2px 8px #e0e7ef22' }}>
                         <LexicalComposer initialConfig={initialConfig}>
+                            {/* <LexicalToolbar /> */}
                             <MentionPlugin onMentionAdd={handleMentionAdd} />
                             <RichTextPlugin
                                 contentEditable={<ContentEditable style={{ minHeight: 120, outline: 'none', background: 'transparent', fontSize: 16, color: '#222' }} />}
@@ -273,6 +301,23 @@ const CreateDiaryDialog = ({ open, onClose, onCreated, diary, mode = 'create' }:
                                 <span style={{ background: '#e0f7fa', color: '#00796b', borderRadius: 4, padding: '0 6px', marginRight: 8, fontWeight: 600 }}>@{data.name}</span>
                                 <Typography fontSize={14} color="text.secondary">x{count}</Typography>
                             </Box>
+                        ))}
+                    </Box>
+                </Box>
+                {/* 标签输入区域 */}
+                <Box sx={{ mt: 2 }}>
+                    {/* <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'primary.main', letterSpacing: 1, mb: 1 }}>标签</Typography> */}
+                    <TextField
+                        value={tagInput}
+                        onChange={handleTagInputChange}
+                        onKeyDown={handleTagInputKeyDown}
+                        placeholder="输入标签后回车/空格/逗号添加"
+                        size="small"
+                        sx={{ bgcolor: '#f6f8fa', borderRadius: 2 }}
+                    />
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, my: 1 }}>
+                        {tags.map(tag => (
+                            <Chip key={tag} label={tag} onDelete={() => handleTagDelete(tag)} color="primary" size="small" />
                         ))}
                     </Box>
                 </Box>
